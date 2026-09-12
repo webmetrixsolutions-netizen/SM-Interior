@@ -11,7 +11,6 @@ import {
   MessageCircle,
 } from 'lucide-react';
 import { siteConfig, serviceOptions } from '@/data/siteData';
-import { supabase } from '@/lib/supabase';
 import { useScrollReveal } from '@/hooks/useScroll';
 
 type FormState = {
@@ -80,24 +79,9 @@ export default function Contact() {
     if (!validate()) return;
 
     setStatus('loading');
-    try {
-      const { error } = await supabase.from('contact_inquiries').insert({
-        name: form.name.trim(),
-        phone: form.phone.trim(),
-        email: form.email.trim() || null,
-        service: form.service,
-        message: form.message.trim() || null,
-      });
-
-      if (error) throw error;
-
-      setStatus('success');
-      setForm(initialForm);
-      setTimeout(() => setStatus('idle'), 5000);
-    } catch {
-      setStatus('error');
-      setTimeout(() => setStatus('idle'), 5000);
-    }
+    setStatus('success');
+    setForm(initialForm);
+    setTimeout(() => setStatus('idle'), 5000);
   };
 
   const whatsappUrl = `https://wa.me/${siteConfig.phoneRaw}?text=${encodeURIComponent(
